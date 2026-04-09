@@ -1,0 +1,12 @@
+[Unit]
+Description=7-day battery SoC forecast
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/matt/amber-control
+ExecStart=/usr/bin/python3 /home/matt/amber-control/battery_forecast.py
+User=matt
+StandardOutput=journal
+StandardError=journal
