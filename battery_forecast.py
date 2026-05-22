@@ -280,7 +280,7 @@ DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 def main() -> None:
     print("=== 7-Day Battery Forecast ===\n")
 
-    with InfluxDBClient(url=INFLUX_URL, token=INFLUX_TOKEN, org=INFLUX_ORG) as client:
+    with InfluxDBClient(url=INFLUX_URL, token=INFLUX_TOKEN, org=INFLUX_ORG, timeout=60000) as client:
         print("Fetching historical data from InfluxDB ...", end=" ", flush=True)
         load_by_date, pv_by_date = get_historical_daily_totals(client)
         current_soc = get_current_soc(client)
