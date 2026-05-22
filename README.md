@@ -1,6 +1,8 @@
-# battery-forecast
+# Sigen Battery Forecast
 
-7-day battery state-of-charge forecast for a solar + battery system (Sigen inverter).
+7-day battery state-of-charge forecast for a Sigen solar + battery system.
+
+**Repository location:** `~/projects/sigen-battery-forecast` (moved 2026-05-22 from `~/battery-forecast`)
 
 Runs daily, pulls historical data from InfluxDB, fetches a weather forecast from [Open-Meteo](https://open-meteo.com), simulates the next 7 days of battery charge/discharge, and writes the predictions back to InfluxDB for display in Grafana.
 
