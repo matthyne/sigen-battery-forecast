@@ -57,6 +57,21 @@ The following constants at the top of `battery_forecast.py` can be tuned to matc
 
 ## Running manually
 
+When running directly (not via systemd), set environment variables:
+
+```bash
+export LATITUDE=-33.977046
+export LONGITUDE=151.136525
+export INFLUXDB_URL=http://toby.hyne.com:8086
+export INFLUXDB_TOKEN=your-token
+export INFLUXDB_ORG=hyne
+export INFLUXDB_BUCKET=solar
+
+python3 battery_forecast.py
+```
+
+Or use a `.env` file (see Configuration section above):
+
 ```bash
 python3 battery_forecast.py
 ```
@@ -83,6 +98,16 @@ Date         Day       PV    Load     Net   SoC%  Notes
 ✓  Battery should remain above minimum SoC for all 7 days.
 ```
 
+## Performance notes
+
+The Flux queries that fetch 90 days of historical data can take significant time on busy InfluxDB systems. The client is configured with a **60-second timeout** to accommodate this. If you see `ReadTimeoutError` on slower systems, the timeout can be adjusted in `battery_forecast.py` line 283:
+
+```python
+with InfluxDBClient(url=INFLUX_URL, token=INFLUX_TOKEN, org=INFLUX_ORG, timeout=60000) as client:
+```
+
+The timeout is in milliseconds; increase as needed for your infrastructure.
+
 ## Systemd timer (daily at 06:00)
 
 Copy the service and timer units, then enable:
@@ -101,7 +126,7 @@ systemctl status battery-forecast.timer
 journalctl -u battery-forecast.service -n 50
 ```
 
-The `battery-forecast.service` unit file assumes the script lives at `/home/matt/amber-control/battery_forecast.py`. Adjust `ExecStart` and `WorkingDirectory` if you install it elsewhere.
+The `battery-forecast.service` unit file assumes the script lives at `/home/matt/projects/sigen-battery-forecast/battery_forecast.py`. Adjust `ExecStart` and `WorkingDirectory` if you install it elsewhere.
 
 ## InfluxDB output
 
